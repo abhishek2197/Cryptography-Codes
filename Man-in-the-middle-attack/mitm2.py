@@ -1,16 +1,21 @@
 import socket 
- 
+import random 
 host = socket.gethostname() 
 port = 2004
 BUFFER_SIZE = 2000 
-MESSAGE = "Private key is 7"
- 
-tcpClientB = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-tcpClientB.connect((host, port))
+g=11
+p=7
+exp= random.randint(1,10)
+k= (g**exp)%p
+MESSAGE = ""+str(k) 
 
-tcpClientB.send(MESSAGE.encode())     
-data = tcpClientB.recv(BUFFER_SIZE)
-print " Client received data:", data.decode()
+print "Private Key of Bob = "+str(exp) 
+Bob = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+Bob.connect((host, port))
+
+Bob.send(MESSAGE.encode())     
+data = Bob.recv(BUFFER_SIZE)
+print "Bob received data:", data.decode()
     
- 
-tcpClientB.close() 
+print "Final key of Bob with Eve "+str((int(data)**exp)%p) 
+Bob.close() 
